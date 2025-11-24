@@ -6,22 +6,21 @@ import logo from '../assets/logo.png';
 export default function FirstScreen({navigation}){
     return(
         <Background>
-        <View style={styles.logo}>
-            <Image source={logo} style={styles.image}></Image>
-        </View>
-        <View style={styles.titleContainer}>
-            <Text style={styles.title}>WELCOME</Text>
-        </View>
-        <View style={styles.descContainer}>
-            <Text style={styles.desc}>This app is the simplest way to save your parking lot</Text>
-        </View>
-        <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Login')}>
-                <Text style={styles.buttonText}>Next</Text>
-            </TouchableOpacity>
-        </View>
+            <View style={styles.logo}>
+                <Image source={logo} style={styles.image}></Image>
+            </View>
+            <View style={styles.titleContainer}>
+                <Text style={styles.title}>WELCOME</Text>
+            </View>
+            <View style={styles.descContainer}>
+                <Text style={styles.desc}>This app is the simplest way to save your parking lot</Text>
+            </View>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Login')}>
+                    <Text style={styles.buttonText}>Next</Text>
+                </TouchableOpacity>
+            </View>
         </Background>
-
     );
 }
 

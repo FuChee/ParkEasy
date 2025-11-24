@@ -46,7 +46,6 @@ export default function EditProfileScreen() {
         return;
       }
 
-      // ✅ Update profile
       await updateProfile({ user_id: user.id, name: editedName, email: editedEmail }).unwrap();
       setUser({ ...user, name: editedName, email: editedEmail });
 

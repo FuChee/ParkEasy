@@ -108,108 +108,108 @@ export default function StatsScreen(){
     <View style={{ paddingHorizontal: 16, paddingTop: 16, flex: 1 }}>
         <ScrollView showsVerticalScrollIndicator={false}>
 
-        <View style={styles.titleContainer}>
-            <Text style={styles.screenTitle}>Your Parking Stats</Text>
-            <Text style={styles.date}>{formattedDate}</Text>
-        </View>
+            <View style={styles.titleContainer}>
+                <Text style={styles.screenTitle}>Your Parking Stats</Text>
+                <Text style={styles.date}>{formattedDate}</Text>
+            </View>
 
-        {isLoading ? (
-            <View style={styles.centered}>
-            <ActivityIndicator size="large" color="#9E8F67" />
-            <Text style={styles.tipText}>Loading your stats...</Text>
-            </View>
-        ) : error ? (
-            <View style={styles.centered}>
-            <Ionicons name="alert-circle-outline" size={50} color="#C2B490" />
-            <Text style={styles.emptyText}>Error loading statistics</Text>
-            <TouchableOpacity style={styles.retryButton} onPress={refetch}>
-                <Text style={styles.retryText}>Retry</Text>
-            </TouchableOpacity>
-            </View>
-        ) : !statsData ? (
-            <View style={styles.centered}>
-            <Text style={styles.loadingText}>No parking data available.</Text>
-            </View>
-        ) : (
-            <>
-            <View style={styles.totalCard}>
-                <Text style={styles.title}>Total Parking Duration</Text>
-                <View style={styles.centerSection}>
-                <Text style={{ fontSize: 36, fontWeight: 'bold', marginTop: 12 }}>
-                    {statsData.totalDuration > 0 ? formatDuration(statsData.totalDuration) : 'No data'}
-                </Text>
+            {isLoading ? (
+                <View style={styles.centered}>
+                <ActivityIndicator size="large" color="#9E8F67" />
+                <Text style={styles.tipText}>Loading your stats...</Text>
                 </View>
-            </View>
-
-            <View style={styles.row}>
-                <View style={styles.card1}>
-                    <Text style={styles.title}>Preferred Time</Text>
+            ) : error ? (
+                <View style={styles.centered}>
+                <Ionicons name="alert-circle-outline" size={50} color="#C2B490" />
+                <Text style={styles.emptyText}>Error loading statistics</Text>
+                <TouchableOpacity style={styles.retryButton} onPress={refetch}>
+                    <Text style={styles.retryText}>Retry</Text>
+                </TouchableOpacity>
+                </View>
+            ) : !statsData ? (
+                <View style={styles.centered}>
+                <Text style={styles.loadingText}>No parking data available.</Text>
+                </View>
+            ) : (
+                <>
+                <View style={styles.totalCard}>
+                    <Text style={styles.title}>Total Parking Duration</Text>
                     <View style={styles.centerSection}>
-                        <Text style={styles.infoValue}>
-                        {statsData.preferredTimeRange &&
-                        statsData.preferredTimeRange.trim() !== '' &&
-                        statsData.preferredTimeRange.toLowerCase() !== 'no data yet'
-                            ? statsData.preferredTimeRange.replace(/\s*[-–]\s*/, '\n-\n')
-                            : 'No data available'}
-                        </Text>
+                    <Text style={{ fontSize: 36, fontWeight: 'bold', marginTop: 12 }}>
+                        {statsData.totalDuration > 0 ? formatDuration(statsData.totalDuration) : 'No data'}
+                    </Text>
                     </View>
                 </View>
 
-                <View style={styles.card2}>
-                    <Text style={styles.title}>Preferred Slot</Text>
-                    <View style={styles.centerSection}>
-                        <Text style={styles.infoValue}>
-                        {statsData.preferredSlot &&
-                        statsData.preferredSlot.trim() !== '' &&
-                        statsData.preferredSlot.toLowerCase() !== 'no data'
-                            ? statsData.preferredSlot.replace(' - ', '\n-\n') 
-                            : 'No data available'}
-                        </Text>
-                    </View>
-                </View>
-            </View>
-
-            <View style={styles.row}>
-                <View style={styles.card1}>
-                    <Text style={styles.title}>Average Duration</Text>
-                    <View style={styles.centerSection}>
-                        <Text style={styles.infoValue}>{averageDuration > 0 ? formatDuration(averageDuration) : 'No data'}</Text>
-                    </View>
-                </View>
-
-                <View style={styles.card2}>
-                    <Text style={styles.title}>Total Parking</Text>
-                    <View style={styles.centerSection}>
-                        <Text style={{ fontSize: 36, fontWeight: 'bold', marginTop: 12 }}>{totalSessions}</Text>
-                    </View>
-                </View>
-            </View>
-
-            <View style={styles.freqCard}>
-                <Text style={styles.label}>Top 3 Frequently Used Slots</Text>
-                {topSlots.length === 0 ? (
-                <Text style={styles.noDataText}>No slot data available.</Text>
-                ) : (
-                topSlots.map(([slot, count], index) => {
-                    const max = Math.max(...Object.values(statsData.slotCount || {}));
-                    const widthPercent = (count / max) * 100;
-                    return (
-                    <View key={slot} style={styles.slotItem}>
-                        <View style={styles.slotHeader}>
-                        <Text style={styles.rank}>{index + 1}.</Text>
-                        <Text style={styles.slotText}>{slot}</Text>
-                        <Text style={styles.count}>{count}×</Text>
-                        </View>
-                        <View style={styles.barContainer}>
-                        <View style={[styles.barFill, { width: `${widthPercent}%` }]} />
+                <View style={styles.row}>
+                    <View style={styles.card1}>
+                        <Text style={styles.title}>Preferred Time</Text>
+                        <View style={styles.centerSection}>
+                            <Text style={styles.infoValue}>
+                            {statsData.preferredTimeRange &&
+                            statsData.preferredTimeRange.trim() !== '' &&
+                            statsData.preferredTimeRange.toLowerCase() !== 'no data yet'
+                                ? statsData.preferredTimeRange.replace(/\s*[-–]\s*/, '\n-\n')
+                                : 'No data available'}
+                            </Text>
                         </View>
                     </View>
-                    );
-                })
-                )}
-            </View>
-            </>
-        )}
+
+                    <View style={styles.card2}>
+                        <Text style={styles.title}>Preferred Slot</Text>
+                        <View style={styles.centerSection}>
+                            <Text style={styles.infoValue}>
+                            {statsData.preferredSlot &&
+                            statsData.preferredSlot.trim() !== '' &&
+                            statsData.preferredSlot.toLowerCase() !== 'no data'
+                                ? statsData.preferredSlot.replace(' - ', '\n-\n') 
+                                : 'No data available'}
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+
+                <View style={styles.row}>
+                    <View style={styles.card1}>
+                        <Text style={styles.title}>Average Duration</Text>
+                        <View style={styles.centerSection}>
+                            <Text style={styles.infoValue}>{averageDuration > 0 ? formatDuration(averageDuration) : 'No data'}</Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.card2}>
+                        <Text style={styles.title}>Total Parking</Text>
+                        <View style={styles.centerSection}>
+                            <Text style={{ fontSize: 36, fontWeight: 'bold', marginTop: 12 }}>{totalSessions}</Text>
+                        </View>
+                    </View>
+                </View>
+
+                <View style={styles.freqCard}>
+                    <Text style={styles.label}>Top 3 Frequently Used Slots</Text>
+                    {topSlots.length === 0 ? (
+                    <Text style={{fontSize: 16, fontWeight: 'bold', marginTop: 12, textAlign: 'center'}}>No slot data available.</Text>
+                    ) : (
+                    topSlots.map(([slot, count], index) => {
+                        const max = Math.max(...Object.values(statsData.slotCount || {}));
+                        const widthPercent = (count / max) * 100;
+                        return (
+                        <View key={slot} style={styles.slotItem}>
+                            <View style={styles.slotHeader}>
+                            <Text style={styles.rank}>{index + 1}.</Text>
+                            <Text style={styles.slotText}>{slot}</Text>
+                            <Text style={styles.count}>{count}×</Text>
+                            </View>
+                            <View style={styles.barContainer}>
+                            <View style={[styles.barFill, { width: `${widthPercent}%` }]} />
+                            </View>
+                        </View>
+                        );
+                    })
+                    )}
+                </View>
+                </>
+            )}
         </ScrollView>
     </View>
 );

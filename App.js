@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 import { UserProvider, UserContext } from './src/context/UserContext';
 
@@ -79,14 +80,28 @@ function MainTabs() {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Parking" component={SavedStackScreen} />
+      <Tab.Screen
+        name="Parking"
+        component={SavedStackScreen}
+        options={({ route }) => {
+          const routeName = getFocusedRouteNameFromRoute(route) ?? 'History';
+          return {
+            tabBarStyle: routeName === 'ParkingDetail' ? { display: 'none' } : {
+              height: 80,
+              paddingBottom: 5,
+              borderTopWidth: 0.5,
+              borderTopColor: '#ccc',
+              backgroundColor: '#fff',
+            },
+          };
+        }}
+      />
       <Tab.Screen name="Stats" component={StatsScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }
 
-// Root Stack
 function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -100,7 +115,6 @@ function RootNavigator() {
   );
 }
 
-// Wrap Navigation in Redux Provider
 export default function App() {
   return (
     <GestureHandlerRootView style={{flex:1}}>

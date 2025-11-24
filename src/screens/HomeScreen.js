@@ -1,3 +1,4 @@
+//./src/screens/HomeScreen.js
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import {
   View,
@@ -33,7 +34,6 @@ export default function HomeScreen() {
   const { user } = useContext(UserContext);
   const navigation = useNavigation();
 
-  // --- State Management ---
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMode, setModalMode] = useState('manual'); 
   const [elapsedTime, setElapsedTime] = useState('00:00:00');
@@ -265,7 +265,7 @@ export default function HomeScreen() {
     const minute = date.getMinutes();
     const totalMinutes = hour * 60 + minute;
 
-    // Work schedule logic
+    // Work schedule 
     const t8am = 8 * 60;
     const t845am = 8 * 60 + 45;
     const t930am = 9 * 60 + 30;
@@ -296,9 +296,14 @@ export default function HomeScreen() {
       body: "It's almost your expected leave time.",
       fireDate: leaveTime.toISOString(),
       sound: "default",
+      attachments: [
+        {
+          id: 'logo',
+          url: 'bundle://logo.png',
+          type: 'image'
+        }
+      ]
     });
-
-    console.log("🔔 Notification scheduled for:", leaveTime);
   };
 
   const onParkingAdded = (record) => {
@@ -350,7 +355,6 @@ export default function HomeScreen() {
     }
   };
 
-  // --- Render ---
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -441,7 +445,6 @@ export default function HomeScreen() {
         )}
       </ScrollView>
 
-      {/* MODAL */}
       <Modal
         visible={modalVisible}
         transparent
@@ -452,7 +455,6 @@ export default function HomeScreen() {
           <Animated.View style={[styles.modalBox, { transform: [{ translateY: modalAnim }] }]}>
             <Text style={styles.modalTitle}>Add Parking Slot</Text>
 
-            {/* Dropdown with label */}
             <View style={{ marginBottom: 16, width: '100%', zIndex: 2000 }}>
               <Text style={styles.dropdownLabel}>Select Level</Text>
               <DropDownPicker
@@ -469,7 +471,6 @@ export default function HomeScreen() {
               />
             </View>
 
-            {/* Slot number input with label */}
             <View style={{ marginBottom: 16, width: '100%', zIndex: 1000 }}>
               <Text style={styles.inputLabel}>Enter Slot Number</Text>
               <TextInput
@@ -495,7 +496,6 @@ export default function HomeScreen() {
   );
 }
 
-// --- Styles ---
 const styles = StyleSheet.create({
   centered: {
     marginTop: 100,

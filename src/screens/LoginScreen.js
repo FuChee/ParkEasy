@@ -8,9 +8,6 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
 } from 'react-native';
 import { useLoginMutation } from '../profile/loginApi';
 import { UserContext } from '../context/UserContext';

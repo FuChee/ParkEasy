@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00D339C52ED4060900C43037 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 00D339C42ED4060900C43037 /* logo.png */; };
 		0C80B921A6F3F58F76C31292 /* libPods-ParkEasy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-ParkEasy.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		00D339C42ED4060900C43037 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		00F818062ECD5FAC00A7C8B3 /* ParkEasy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ParkEasy.entitlements; path = ParkEasy/ParkEasy.entitlements; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* ParkEasy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParkEasy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ParkEasy/Images.xcassets; sourceTree = "<group>"; };
@@ -49,6 +51,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
+				00D339C42ED4060900C43037 /* logo.png */,
 			);
 			name = ParkEasy;
 			sourceTree = "<group>";
@@ -160,6 +163,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00D339C52ED4060900C43037 /* logo.png in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				E1B1AD1BB23A75E10396C148 /* PrivacyInfo.xcprivacy in Resources */,

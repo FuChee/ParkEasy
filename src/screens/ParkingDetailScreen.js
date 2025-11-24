@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { UserContext } from '../context/UserContext';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function ParkingDetailScreen({ route, navigation }) {
-  const { user } = useContext(UserContext);
   const { record } = route.params;
   const formatDateTime = (datetime, startDate) => {
     if (!datetime) return 'N/A';
@@ -28,15 +26,11 @@ export default function ParkingDetailScreen({ route, navigation }) {
     const startTime = new Date(start);
     const endTime = end ? new Date(end) : new Date(); 
     
-    // --- FIX START ---
-    // Calculate difference
     let diffMs = endTime - startTime;
 
-    // If the result is negative (due to clock mismatch), force it to 0
     if (diffMs < 0) {
       diffMs = 0;
     }
-    // --- FIX END ---
 
     const totalSeconds = Math.floor(diffMs / 1000);
     const days = Math.floor(totalSeconds / (3600 * 24));
@@ -49,7 +43,7 @@ export default function ParkingDetailScreen({ route, navigation }) {
     if (hours > 0) durationStr += `${hours} hr${hours > 1 ? 's' : ''} `;
     if (minutes > 0) durationStr += `${minutes} min `;
     
-    // Ensure we always return at least "0 sec" if everything else is empty
+
     durationStr += `${seconds} sec`; 
 
     return durationStr.trim();
