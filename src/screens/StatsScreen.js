@@ -252,20 +252,23 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     card1: {
+        flex: 1,                  
         backgroundColor: '#D2EBD3',
         height: 150,
         padding: 20,
-        width: 180,
         borderRadius: 20,
         alignItems: 'center',
+        marginRight: 6,           
     },
+
     card2: {
+        flex: 1,
         backgroundColor: '#D2EBD3',
         height: 150,
         padding: 20,
-        width: 180,
         borderRadius: 20,
         alignItems: 'center',
+        marginLeft: 6,            
     },
   title: {
     fontSize: 16,
