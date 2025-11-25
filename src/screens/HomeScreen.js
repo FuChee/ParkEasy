@@ -74,7 +74,7 @@ export default function HomeScreen() {
 
   const activeRecord = parkingRecords?.find(r => r.left_at === null) || null;
   const completedRecords = parkingRecords?.filter(r => r.left_at !== null) || [];
-  const recentTwo = completedRecords.slice(0, 2);
+  const recentTwo = completedRecords.slice(0, 3);
 
   const [prevActiveRecord, setPrevActiveRecord] = useState(activeRecord);
 

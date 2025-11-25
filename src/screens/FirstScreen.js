@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 222,         
         alignSelf: 'center', 
-        width: 220,
-        height: 220,
+        width: 300,
+        height: 300,
         resizeMode: 'contain',
     },
     titleContainer: {
