@@ -6,20 +6,16 @@ export default function FirstScreen({ navigation }) {
     return (
         <Background>
             <View style={styles.container}>
-                {/* Logo Image */}
                 <Image source={logo} style={styles.image} />
 
-                {/* Title */}
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}>WELCOME</Text>
                 </View>
 
-                {/* Description */}
                 <View style={styles.descContainer}>
                     <Text style={styles.desc}>This app is the simplest way to save your parking lot</Text>
                 </View>
 
-                {/* Button */}
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
                         <Text style={styles.buttonText}>Next</Text>
