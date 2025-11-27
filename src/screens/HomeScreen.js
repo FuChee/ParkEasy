@@ -44,6 +44,7 @@ export default function HomeScreen() {
   const [slots, setSlots] = useState([]);
   const [location, setLocation] = useState(null);
   const [updating, setUpdating] = useState(false); 
+  const [hasShownLocationWarning, setHasShownLocationWarning] = useState(false);
   
   // Form States
   const [slotNumber, setSlotNumber] = useState('');
@@ -161,15 +162,23 @@ export default function HomeScreen() {
     let nearest = null;
     let minDistance = Infinity;
 
+    const useElevation = currentAlt && currentAlt !== 0;
+
     slots.forEach((s) => {
 
-      const latDiff = s.latitude - currentLat;
-      const lonDiff = s.longitude - currentLong;
+      const latDiffMeters = (s.latitude - currentLat) * 111000;
+      const lonDiffMeters = (s.longitude - currentLong) * 111000;
 
-      const distanceSq = (latDiff * latDiff) + (lonDiff * lonDiff);
+      let totalDistanceSq = (latDiffMeters * latDiffMeters) + (lonDiffMeters * lonDiffMeters);
 
-      if (distanceSq < minDistance) {
-        minDistance = distanceSq;
+
+      if (useElevation) {
+         const altDiff = (s.elevation - currentAlt); 
+         totalDistanceSq += (altDiff * altDiff); 
+      }
+
+      if (totalDistanceSq < minDistance) {
+        minDistance = totalDistanceSq;
         nearest = s;
       }
     });
@@ -204,9 +213,23 @@ export default function HomeScreen() {
 
     Geolocation.getCurrentPosition(
       ({ coords }) => {
-        const { latitude, longitude, altitude } = coords;
-        console.log("Location detected:", latitude, longitude);
+        // 1. Get 'accuracy' from the coordinates object
+        const { latitude, longitude, altitude, accuracy } = coords;
+        console.log("Location detected:", latitude, longitude, "Accuracy:", accuracy);
         
+        // 2. Check if accuracy is poor (greater than 20 meters)
+        // AND check if we have already warned the user to avoid spamming them.
+        if (accuracy > 20 && !hasShownLocationWarning) {
+            Alert.alert(
+                "Improve Location Accuracy", 
+                "Your GPS signal is weak. Please turn on Wi-Fi and Bluetooth to improve accuracy inside the parking building.",
+                [
+                    { text: "OK", onPress: () => console.log("User acknowledged warning") }
+                ]
+            );
+            setHasShownLocationWarning(true); // Mark as shown so we don't show it again immediately
+        }
+
         setLocation({ latitude, longitude, elevation: altitude ?? 0 });
         
         setRefreshing(false);
@@ -218,6 +241,7 @@ export default function HomeScreen() {
         setRefreshing(false);
         setUpdating(false);
       },
+      // 3. Optional: Reduced 'timeout' slightly to fail faster if signal is dead
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
   };
