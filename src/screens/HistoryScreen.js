@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  FlatList, // 1. Import FlatList
+  FlatList, 
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../context/UserContext';
@@ -16,15 +16,10 @@ export default function StatsScreen() {
     const { data: parkingRecords, isLoading } = useGetParkingRecordsQuery(user?.id);
     const navigation = useNavigation();
 
-    // 2. Optimization: useMemo
-    // This prevents filtering the array every time the screen flickers or re-renders.
-    // It only re-runs if parkingRecords changes.
     const completedRecords = useMemo(() => {
         return parkingRecords?.filter(record => record.left_at) || [];
     }, [parkingRecords]);
 
-    // 3. Render Item Function
-    // FlatList uses this to render one row at a time efficiently.
     const renderRecord = ({ item }) => {
         const createdDate = new Date(item.created_at);
         const leftDate = new Date(item.left_at);
@@ -46,16 +41,12 @@ export default function StatsScreen() {
         );
     };
 
-    // 4. Header Component
-    // This replaces the View inside your ScrollView that held the Title
     const renderHeader = () => (
         <View style={styles.titleContainer}>
             <Text style={styles.title}>Parking History</Text>
         </View>
     );
 
-    // 5. Empty Component
-    // Displays when there is no data
     const renderEmpty = () => (
         <View style={styles.centered}>
             <Text style={styles.noParking}>No recent parking records.</Text>
@@ -74,12 +65,12 @@ export default function StatsScreen() {
         <View style={styles.container}>
             <FlatList
                 data={completedRecords}
-                keyExtractor={(item) => item.id.toString()} // Ensure ID is a string
+                keyExtractor={(item) => item.id.toString()} 
                 renderItem={renderRecord}
                 ListHeaderComponent={renderHeader}
                 ListEmptyComponent={renderEmpty}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 20 }} // Adds space at bottom of list
+                contentContainerStyle={{ paddingBottom: 20 }} 
             />
         </View>
     );
@@ -96,7 +87,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     centered: {
-        marginTop: 100, // Adjusted for FlatList flow
+        marginTop: 100,
         alignItems: 'center',
     },
     noParking: {

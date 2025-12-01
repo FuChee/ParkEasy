@@ -24,7 +24,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { supabase } from '../lib/supabase';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-
+import PushNotification from 'react-native-push-notification';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -309,25 +309,38 @@ export default function HomeScreen() {
     return leaveTime;
   };
 
+
   const schedulePredictedLeaveNotification = (leaveTime) => {
     if (!(leaveTime instanceof Date) || isNaN(leaveTime.getTime())) return;
 
-    PushNotificationIOS.requestPermissions();
+    if (Platform.OS === 'ios') {
+      PushNotificationIOS.requestPermissions();
 
-    PushNotificationIOS.addNotificationRequest({
-      id: `predicted-leave-${Date.now()}`,
-      title: "Parking Reminder",
-      body: "It's almost your expected leave time.",
-      fireDate: leaveTime.toISOString(),
-      sound: "default",
-      attachments: [
-        {
-          id: 'logo',
-          url: 'bundle://logo.png',
-          type: 'image'
-        }
-      ]
-    });
+      PushNotificationIOS.addNotificationRequest({
+        id: `predicted-leave-${Date.now()}`,
+        title: "Parking Reminder",
+        body: "It's almost your expected leave time.",
+        fireDate: leaveTime.toISOString(),
+        sound: "default",
+        attachments: [
+          {
+            id: 'logo',
+            url: 'bundle://logo.png',
+            type: 'image'
+          }
+        ]
+      });
+    } else {
+      // Android
+      PushNotification.localNotificationSchedule({
+        channelId: "default-channel-id",
+        title: "Parking Reminder",
+        message: "It's almost your expected leave time.",
+        date: leaveTime,
+        allowWhileIdle: true,
+        smallIcon: "ic_launcher", 
+      });
+    }
   };
 
   const onParkingAdded = (record) => {
