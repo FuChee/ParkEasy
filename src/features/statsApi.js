@@ -19,55 +19,65 @@ export const statsApi = createApi({
 
           let totalDuration = 0;
           const slotCount = {};
-          const hourSlotCount = {}; 
+          const timeSlotCount = {}; 
 
           data.forEach((rec) => {
             const created = new Date(rec.created_at);
+
             const hour = created.getHours();
+            const minute = created.getMinutes();
+            const halfHour = minute < 30 ? 0 : 30;
+            const timeKey = `${hour}:${halfHour}`;
+
             const slotKey = `Level ${rec.level} - Slot ${rec.slot_number}`;
 
-           
-            if (!hourSlotCount[hour]) hourSlotCount[hour] = {};
-            hourSlotCount[hour][slotKey] = (hourSlotCount[hour][slotKey] || 0) + 1;
+            if (!timeSlotCount[timeKey]) timeSlotCount[timeKey] = {};
+            timeSlotCount[timeKey][slotKey] =
+              (timeSlotCount[timeKey][slotKey] || 0) + 1;
 
-        
             slotCount[slotKey] = (slotCount[slotKey] || 0) + 1;
 
-          
             if (rec.left_at) {
               const start = new Date(rec.created_at);
               const end = new Date(rec.left_at);
-              totalDuration += (end - start) / 1000 / 60; 
+              totalDuration += (end - start) / 1000 / 60;
             }
           });
 
-          let preferredHour = null;
+          let preferredTimeKey = null;
           let maxCount = 0;
-          for (const hour in hourSlotCount) {
-            const totalAtHour = Object.values(hourSlotCount[hour]).reduce(
+
+          for (const key in timeSlotCount) {
+            const totalAtTime = Object.values(timeSlotCount[key]).reduce(
               (a, b) => a + b,
               0
             );
-            if (totalAtHour > maxCount) {
-              maxCount = totalAtHour;
-              preferredHour = parseInt(hour);
+
+            if (totalAtTime > maxCount) {
+              maxCount = totalAtTime;
+              preferredTimeKey = key;
             }
           }
 
           let preferredSlot = 'No data';
-          if (preferredHour !== null) {
-            const slotStats = hourSlotCount[preferredHour];
+          if (preferredTimeKey) {
+            const slotStats = timeSlotCount[preferredTimeKey];
             preferredSlot = Object.keys(slotStats).reduce((a, b) =>
               slotStats[a] > slotStats[b] ? a : b
             );
           }
 
           let preferredTimeRange = 'No data yet';
-          if (preferredHour !== null) {
+
+          if (preferredTimeKey) {
+            const [hour, minute] = preferredTimeKey.split(':').map(Number);
+
             const start = new Date();
-            start.setHours(preferredHour, 0, 0);
-            const end = new Date();
-            end.setHours(preferredHour + 1, 0, 0);
+            start.setHours(hour, minute, 0);
+
+            const end = new Date(start);
+            end.setMinutes(start.getMinutes() + 30);
+
             preferredTimeRange = `${start.toLocaleTimeString([], {
               hour: '2-digit',
               minute: '2-digit',
@@ -79,7 +89,7 @@ export const statsApi = createApi({
 
           return {
             data: {
-              totalDuration,
+              totalDuration,         
               slotCount,
               preferredTimeRange,
               preferredSlot,
@@ -91,8 +101,8 @@ export const statsApi = createApi({
         }
       },
     }),
-   
+
   }),
 });
 
-export const { useGetDailyScheduleQuery, useGetParkingStatsQuery } = statsApi;
+export const { useGetParkingStatsQuery } = statsApi;

@@ -54,7 +54,7 @@ export default function HomeScreen() {
   // Dropdown States
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
+  const [level, setLevel] = useState([
     { label: 'G', value: 'G' },
     { label: '1', value: '1' },
     { label: '2', value: '2' },
@@ -394,7 +394,9 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ flexGrow: 1 }}>
 
         <View style={styles.titleContainer}>
           <Text style={styles.greeting}>Hi {user?.name || 'user'}</Text>
@@ -497,10 +499,10 @@ export default function HomeScreen() {
               <DropDownPicker
                 open={open}
                 value={value}
-                items={items}
+                items={level}
                 setOpen={setOpen}
                 setValue={setValue}
-                setItems={setItems}
+                setItems={setLevel}
                 placeholder="Choose a level"
                 style={styles.dropdown}
                 dropDownContainerStyle={styles.dropdownContainer}
@@ -535,7 +537,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   centered: {
-    marginTop: 100,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -612,7 +614,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold', 
     color: '#000', 
     textAlign: 'center', 
-    paddingVertical: 30 
+    paddingVertical: 30,
   },
   modalTitle: { 
     fontSize: 20, 
@@ -654,7 +656,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     marginVertical: 8,
     overflow: 'hidden',
-   
     elevation: 3, 
     shadowColor: '#000', 
     shadowOffset: { width: 0, height: 2 },

@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   FlatList, 
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../context/UserContext';
 import { useGetParkingRecordsQuery } from '../features/parkingApi';
@@ -16,9 +17,39 @@ export default function StatsScreen() {
     const { data: parkingRecords, isLoading } = useGetParkingRecordsQuery(user?.id);
     const navigation = useNavigation();
 
+    const ITEMS_PER_PAGE = 20;
+    const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+    const listRef = useRef(null);
+    const [showTopBtn, setShowTopBtn] = useState(false);
+
     const completedRecords = useMemo(() => {
-        return parkingRecords?.filter(record => record.left_at) || [];
-    }, [parkingRecords]);
+        return (
+            parkingRecords
+            ?.filter(record => record.left_at)
+            .slice(0, visibleCount) || []
+        );
+    }, [parkingRecords, visibleCount]);
+
+    const renderFooter = () => {
+        if (!parkingRecords) return null;
+
+        const totalCompleted = parkingRecords.filter(r => r.left_at).length;
+
+        if (visibleCount >= totalCompleted) return null;
+
+        return (
+            <TouchableOpacity
+                style={styles.loadMoreBtn}
+                activeOpacity={0.75}
+                onPress={() => setVisibleCount(prev => prev + ITEMS_PER_PAGE)}
+            >
+                <Ionicons name="chevron-down" size={20} color="#fff" />
+                <Text style={styles.loadMoreText}>
+                    Load more ({totalCompleted - visibleCount})
+                </Text>
+            </TouchableOpacity>
+        );
+    };
 
     const renderRecord = ({ item }) => {
         const createdDate = new Date(item.created_at);
@@ -60,18 +91,37 @@ export default function StatsScreen() {
             </View>
         );
     }
+    const handleScroll = (event) => {
+        const offsetY = event.nativeEvent.contentOffset.y;
+        setShowTopBtn(offsetY > 300);
+    };
 
     return (
         <View style={styles.container}>
             <FlatList
+                ref={listRef}
                 data={completedRecords}
-                keyExtractor={(item) => item.id.toString()} 
+                keyExtractor={(item) => item.id.toString()}
                 renderItem={renderRecord}
                 ListHeaderComponent={renderHeader}
                 ListEmptyComponent={renderEmpty}
+                ListFooterComponent={renderFooter}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 20 }} 
+                contentContainerStyle={[
+                    { paddingBottom: 20 },
+                    completedRecords.length === 0 && { flex: 1 }
+                ]}
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
             />
+            {showTopBtn && (
+                <TouchableOpacity
+                    style={styles.topButton}
+                    onPress={() => listRef.current?.scrollToOffset({ offset: 0, animated: true })}
+                >
+                    <Text style={styles.topButtonText}>↑ Top</Text>
+                </TouchableOpacity>
+            )}
         </View>
     );
 }
@@ -87,8 +137,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     centered: {
-        marginTop: 100,
+        flex: 1,
         alignItems: 'center',
+        justifyContent: 'center',
     },
     noParking: {
         fontSize: 16, 
@@ -139,5 +190,46 @@ const styles = StyleSheet.create({
         color: '#000',
         textAlign: 'center',
         paddingVertical: 30,
+    },
+    loadMoreBtn: {
+        marginTop: 20,
+        paddingVertical: 14,
+        paddingHorizontal: 28,
+        alignItems: 'center',
+        alignSelf: 'center',
+        backgroundColor: '#1C4A1E',
+        borderRadius: 28,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        minWidth: 160,
+
+        // subtle shadow
+        shadowColor: '#000',
+        shadowOpacity: 0.12,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 6,
+        elevation: 5,
+    },
+    loadMoreText: {
+        marginLeft: 6,
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#FFFFFF',
+        letterSpacing: 0.3,
+    },
+    topButton: {
+        position: 'absolute',
+        right: 20,
+        bottom: 30,
+        backgroundColor: '#1C4A1E',
+        paddingVertical: 10,
+        paddingHorizontal: 14,
+        borderRadius: 30,
+        elevation: 4,
+    },
+    topButtonText: {
+        color: '#fff',
+        fontWeight: '700',
+        fontSize: 14,
     },
 });

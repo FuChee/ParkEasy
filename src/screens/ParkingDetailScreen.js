@@ -69,9 +69,7 @@ export default function ParkingDetailScreen({ route, navigation }) {
 
       <View style={styles.infoCard}>
         <Text style={styles.infoLabel}>Your parking:</Text>
-        <View style={styles.completeCard}>
-            <Text style={styles.completeLabel}>Completed</Text>
-        </View>
+
         <View style={styles.centerSection}>
           <Text style={styles.location}>Level {record.level} - {record.slot_number}</Text>
         </View>

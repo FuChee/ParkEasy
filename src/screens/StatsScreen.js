@@ -188,7 +188,7 @@ export default function StatsScreen(){
                 <View style={styles.freqCard}>
                     <Text style={styles.label}>Top 3 Frequently Used Slots</Text>
                     {topSlots.length === 0 ? (
-                    <Text style={{fontSize: 16, fontWeight: 'bold', marginTop: 12, textAlign: 'center'}}>No slot data available.</Text>
+                    <Text style={{fontSize: 16, fontWeight: 'bold', margin: 50, textAlign: 'center'}}>No data available.</Text>
                     ) : (
                     topSlots.map(([slot, count], index) => {
                         const max = Math.max(...Object.values(statsData.slotCount || {}));
