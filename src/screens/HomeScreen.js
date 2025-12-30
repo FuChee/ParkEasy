@@ -66,6 +66,7 @@ export default function HomeScreen() {
   const cardOpacity = useRef(new Animated.Value(1)).current;
   const cardTranslate = useRef(new Animated.Value(0)).current;
   const modalAnim = useRef(new Animated.Value(300)).current;
+  const hasShownWifiBtAlertRef = useRef(false);
 
   const watchId = useRef(null);
 
@@ -206,32 +207,34 @@ export default function HomeScreen() {
 
   const detectCurrentLocation = async () => {
     const hasPermission = await requestLocationPermission();
-    if (!hasPermission) return Alert.alert('Permission Denied', 'Location access is required.');
-    
+    if (!hasPermission) {
+      return Alert.alert('Permission Denied', 'Location access is required.');
+    }
+
+    // Prompt user once
+    if (!hasShownWifiBtAlertRef.current) {
+      Alert.alert(
+        'Improve Location Accuracy',
+        'For better indoor accuracy, please turn ON Wi-Fi and Bluetooth.',
+        [{ text: 'OK' }]
+      );
+      hasShownWifiBtAlertRef.current = true;
+    }
+
     setRefreshing(true);
-    setUpdating(true);  
+    setUpdating(true);
 
     Geolocation.getCurrentPosition(
       ({ coords }) => {
-        // 1. Get 'accuracy' from the coordinates object
         const { latitude, longitude, altitude, accuracy } = coords;
-        console.log("Location detected:", latitude, longitude, "Accuracy:", accuracy);
-        
-        // 2. Check if accuracy is poor (greater than 20 meters)
-        // AND check if we have already warned the user to avoid spamming them.
-        if (accuracy > 20 && !hasShownLocationWarning) {
-            Alert.alert(
-                "Improve Location Accuracy", 
-                "Your GPS signal is weak. Please turn on Wi-Fi and Bluetooth to improve accuracy inside the parking building.",
-                [
-                    { text: "OK", onPress: () => console.log("User acknowledged warning") }
-                ]
-            );
-            setHasShownLocationWarning(true); // Mark as shown so we don't show it again immediately
-        }
+        console.log('Location detected:', latitude, longitude, 'Accuracy:', accuracy);
 
-        setLocation({ latitude, longitude, elevation: altitude ?? 0 });
-        
+        setLocation({
+          latitude,
+          longitude,
+          elevation: altitude ?? 0,
+        });
+
         setRefreshing(false);
         setUpdating(false);
       },
@@ -241,7 +244,6 @@ export default function HomeScreen() {
         setRefreshing(false);
         setUpdating(false);
       },
-      // 3. Optional: Reduced 'timeout' slightly to fail faster if signal is dead
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
   };
