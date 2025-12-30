@@ -211,7 +211,6 @@ export default function HomeScreen() {
       return Alert.alert('Permission Denied', 'Location access is required.');
     }
 
-    // Prompt user once
     if (!hasShownWifiBtAlertRef.current) {
       Alert.alert(
         'Improve Location Accuracy',
