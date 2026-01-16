@@ -304,7 +304,7 @@ export default function HomeScreen() {
     } else if (totalMinutes <= t930am) {
       leaveTime.setHours(18, 30, 0, 0);
     } else {
-      leaveTime.setHours(18, 30, 0, 0);
+      leaveTime.setHours(10, 16, 0, 0);
     }
 
     return leaveTime;
@@ -323,7 +323,7 @@ export default function HomeScreen() {
       return granted === PermissionsAndroid.RESULTS.GRANTED;
     }
 
-    return true; // Android < 13
+    return true; 
   };
   const schedulePredictedLeaveNotification = (leaveTime) => {
     if (!(leaveTime instanceof Date) || isNaN(leaveTime.getTime())) return;

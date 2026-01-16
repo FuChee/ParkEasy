@@ -10,6 +10,7 @@ export default function SignUpScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [signUp, { isLoading }] = useSignUpMutation();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSignUp = async () => {
     if (!name.trim() || !email.trim() || !password.trim()) {
@@ -75,10 +76,17 @@ export default function SignUpScreen({ navigation }) {
             style={styles.inputBox}
             placeholder="Password"
             placeholderTextColor="#888"
-            secureTextEntry
+            secureTextEntry={!showPassword}
             value={password}
             onChangeText={setPassword}
           />
+          <TouchableOpacity onPress={() => setShowPassword(prev => !prev)}>
+            <Ionicons
+              name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+              size={20}
+              color="#888"
+            />
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp} disabled={isLoading}>
