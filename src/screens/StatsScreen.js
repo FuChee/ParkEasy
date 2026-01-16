@@ -20,9 +20,7 @@ export default function StatsScreen() {
 
   const [filter, setFilter] = useState('7d');
 
-  /* =========================
-     Realtime Update
-  ========================== */
+
   useEffect(() => {
     if (!user?.id) return;
 
@@ -51,9 +49,7 @@ export default function StatsScreen() {
     }, [refetch])
   );
 
-  /* =========================
-     Helper Functions
-  ========================== */
+
   const formatDuration = (totalMinutes) => {
     const days = Math.floor(totalMinutes / 1440);
     const hours = Math.floor((totalMinutes % 1440) / 60);
@@ -138,9 +134,7 @@ export default function StatsScreen() {
     return { preferredTimeRange, preferredSlot };
   };
 
-  /* =========================
-     Loading / Error
-  ========================== */
+
   if (isLoading) {
     return (
       <View style={styles.centered}>
@@ -169,9 +163,7 @@ export default function StatsScreen() {
     );
   }
 
-  /* =========================
-     Data Processing
-  ========================== */
+
   const filteredHistory = filterHistoryByRange(statsData.history || []);
   const { preferredTimeRange, preferredSlot } =
     calculatePreferred(filteredHistory);
@@ -195,9 +187,7 @@ export default function StatsScreen() {
     day: 'numeric',
   });
 
-  /* =========================
-     UI
-  ========================== */
+
   return (
     <View style={{ paddingHorizontal: 16, paddingTop: 16, flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -285,9 +275,7 @@ export default function StatsScreen() {
   );
 }
 
-/* =========================
-   Styles (UNCHANGED)
-========================== */
+
 const styles = StyleSheet.create({
   titleContainer: {
     marginTop: 80,
